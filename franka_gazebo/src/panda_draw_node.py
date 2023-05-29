@@ -39,9 +39,6 @@ class RobotDraw:
         
         rospy.loginfo('Connected to Actionlib')
 
-        # keeps python from exiting until this node is stopped
-        rospy.spin()
-
     def joint_state_cb(self, msg):
         """
         """
