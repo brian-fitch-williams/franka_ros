@@ -16,7 +16,7 @@ class RobotDraw:
         self._ikine_seed = 100
         self._actionlib_timeout_s = 5
         self._num_moves = 0
-        self._current_move = 0
+        self._moves_completed = 0
         self._joints_trajectory_points=[]
         self._panda_joints = ['panda_joint1','panda_joint2','panda_joint3','panda_joint4',
                         'panda_joint5','panda_joint6','panda_joint7',
@@ -51,10 +51,8 @@ class RobotDraw:
     def result_cb(self, msg):
         """
         """
-        print("cd, send next")
         rospy.loginfo("Result error code: %s: %s", msg.result.error_code, msg.result.error_string)
-        #self._send_next()
-        pass
+        self._moves_completed += 1
 
     def draw_square(self):
         """
@@ -81,13 +79,11 @@ class RobotDraw:
     def _send_next(self):
         """ Send next trajectory command
         """
-        #if self._current_move < self._num_moves:
-        while self._current_move < self._num_moves:
-            rospy.loginfo("Make move %d out of %d", self._current_move, self._num_moves)
+        for i in range(self._num_moves):
             trajectory_message = JointTrajectory()
             trajectory_message.joint_names = self._panda_joints
             trajectory_message.points.append(JointTrajectoryPoint)
-            trajectory_message.points[0].positions = self._joints_trajectory_points[self._current_move]
+            trajectory_message.points[0].positions = self._joints_trajectory_points[i]
             trajectory_message.points[0].velocities = [0.0 for i in self._panda_joints]
             trajectory_message.points[0].accelerations = [0.0 for i in self._panda_joints]
             trajectory_message.points[0].time_from_start = rospy.Duration(3)
@@ -97,7 +93,6 @@ class RobotDraw:
             print("send goal %s" %(str(goal_positions.trajectory.points[0].positions)))
             self._panda_client.send_goal(goal_positions)
             print("after send goal")
-            rospy.sleep(5)
    
 
 if __name__ == '__main__':
