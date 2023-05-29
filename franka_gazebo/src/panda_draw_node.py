@@ -26,7 +26,7 @@ def action_interface():
 
     for i in range(pt_count):
         point = SE3(waypoints_sqaure[i])
-        tpoint = panda_rtb.ikine_LM(point)
+        tpoint = panda_rtb.ikine_LM(point, seed=100)
         print("waypoint %s to traject point %s" %(point, tpoint))
         joints_trajectory_points.append(np.append(tpoint.q ,[0.01, 0.01]))
     rospy.loginfo('Inverse kinematics solved lets start Action !')
@@ -49,7 +49,7 @@ def action_interface():
         goal_positions.trajectory = trajectory_message
         goal_positions.goal_time_tolerance = rospy.Duration(0)
         panda_client.send_goal(goal_positions)
-        rospy.sleep(5)
+        rospy.sleep(2.5)
 
    
 
