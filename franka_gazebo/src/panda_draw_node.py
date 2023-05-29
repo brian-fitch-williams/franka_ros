@@ -19,7 +19,8 @@ def action_interface():
                     [0.5, 0.5, 0.6],
                     [0.5, 0, 0.6]
                     ]
-    pt_count = 5
+    
+    pt_count = 4
     joints_trajectory_points=[]
     panda_rtb = rtb.models.URDF.Panda()
 
